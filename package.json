@@ -1,0 +1,17 @@
+{
+  "name": "star-liner",
+  "version": "0.1.0",
+  "description": "Chart your GitHub stargazers in real-time using D3.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "d3js",
+    "github",
+    "stargazer",
+    "chart"
+  ],
+  "author": "Jonathan Petitcolas <petitcolas.jonathan@gmail.com>",
+  "license": "MIT"
+}

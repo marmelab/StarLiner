@@ -12,5 +12,6 @@ module.exports = {
             username: '',
             password: ''
         }
-    }
+    },
+    port: 3000
 };

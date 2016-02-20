@@ -4,6 +4,7 @@
   "description": "Chart your GitHub stargazers in real-time using D3.js",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node api-proxy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,9 +16,9 @@
   "author": "Jonathan Petitcolas <petitcolas.jonathan@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "co": "~4.6.0",
     "config": "~1.19.0",
-    "github": "~0.2.4"
+    "github": "~0.2.4",
+    "koa": "~1.1.2"
   },
   "devDependencies": {
     "babel-cli": "~6.5.1",

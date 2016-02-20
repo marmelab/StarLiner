@@ -1,0 +1,11 @@
+module.exports = {
+    github: {
+        authentication: {
+            username: '',
+            password: ''
+        }
+    },
+    repositories: [
+        { label: 'star-liner', repository: 'marmelab/star-liner' }
+    ]
+};

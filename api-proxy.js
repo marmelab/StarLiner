@@ -3,6 +3,7 @@ import GithubApi from 'github';
 import koa from 'koa';
 
 const app = koa();
+app.use(require('koa-cors')());
 
 const github = new GithubApi(config.github);
 github.authenticate(config.github.authentication);

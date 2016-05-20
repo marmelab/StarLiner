@@ -6,6 +6,6 @@ module.exports = {
         }
     },
     repositories: [
-        { label: 'star-liner', repository: 'marmelab/star-liner' }
+        { label: 'StarLiner', repository: 'marmelab/StarLiner' }
     ]
 };

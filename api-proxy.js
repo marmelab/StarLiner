@@ -1,6 +1,6 @@
-import config from 'config';
-import GithubApi from 'github';
-import koa from 'koa';
+const config = require('config');
+const GithubApi = require('github');
+const koa = require('koa');
 
 const app = koa();
 app.use(require('koa-cors')());
@@ -9,7 +9,10 @@ const github = new GithubApi(config.github);
 github.authenticate(config.github.authentication);
 
 const stargazersCount = function* (repository) {
-    const [user, repo] = repository.repository.split('/');
+    const repositoryData = repository.repository.split('/');
+    const user = repositoryData[0];
+    const repo = repositoryData[1];
+
     const response = yield (cb => github.repos.get({ user, repo }, cb));
 
     return {

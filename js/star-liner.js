@@ -7,8 +7,12 @@ const height = 640;
 
 const colors = d3.scale.category10();
 
+const marginLeft = 30;
+const marginBottom = 30;
+
+const start = new Date();
 const x = d3.time.scale()
-    .range([0, width - 40])
+    .range([marginLeft, width - marginBottom])
     .domain([new Date(), new Date(new Date().getTime() + 60 * 1000)]);
 
 const xAxis = d3.svg.axis()
@@ -16,14 +20,23 @@ const xAxis = d3.svg.axis()
     .orient('bottom');
 
 const y = d3.scale.linear()
-    .range([height - 40, 20])
-    .domain([400, 500]);
+    .range([height - 50, 0])
+    .domain([0, 10]);
 
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
 const data = [];
+
+const updateAxes = () => {
+    y.domain([0, d3.max(data[0].values, d => d.stars)]);
+    yAxis.scale(y);
+
+    x.domain([start, new Date()]);
+    xAxis.scale(x);
+};
+
 setInterval(() => {
     fetch('http://localhost:3000/')
         .then(response => response.json())
@@ -41,36 +54,41 @@ setInterval(() => {
                     stars: stat.stars
                 });
             });
-
+            updateAxes();
             draw();
         });
-}, 1000);
+}, 3000);
 
 const svg = d3.select('#chart').append('svg')
     .attr('height', height)
     .attr('width', width);
 
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", `translate(50, ${height - 40})`)
-    .call(xAxis);
+const drawAxes = () => {
+    svg.selectAll('.axis').remove();
 
-svg.append("g")
-    .attr("class", "y axis")
-    .attr('transform', `translate(50, 0)`)
-    .call(yAxis);
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", `translate(0, ${height - marginBottom})`)
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr('transform', `translate(${marginLeft}, 0)`)
+        .call(yAxis);
+}
 
 const line = d3.svg.line()
     .x(d => x(d.date))
     .y(d => y(d.stars));
 
 const draw = () => {
+    drawAxes();
+
     const lines = svg.selectAll('.line')
         .data(data, d => d.name);
 
     lines.enter()
         .append('path')
-        .attr('transform', `translate(30, 40)`)
         .attr('stroke', d => colors(d.name))
         .attr('class', 'line')
         .attr('data-label', d => d.name);

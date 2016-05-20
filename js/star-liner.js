@@ -10,7 +10,6 @@ const colors = d3.scale.category10();
 const marginLeft = 30;
 const marginBottom = 30;
 
-const start = new Date();
 const x = d3.time.scale()
     .range([marginLeft, width - marginBottom])
     .domain([new Date(), new Date(new Date().getTime() + 60 * 1000)]);
@@ -27,15 +26,25 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
-const data = [];
-
 const updateAxes = () => {
     y.domain([0, d3.max(data[0].values, d => d.stars)]);
     yAxis.scale(y);
 
-    x.domain([start, new Date()]);
+    x.domain([new Date(data[0].values[0].date), new Date()]);
     xAxis.scale(x);
 };
+
+const localStoragePersister = {
+    set: (stats) => {
+        window.localStorage.setItem('stats', JSON.stringify(stats));
+    },
+
+    get: () => {
+        return JSON.parse(window.localStorage.getItem('stats'));
+    }
+};
+
+const data = localStoragePersister.get('stats') || [];
 
 setInterval(() => {
     fetch('http://localhost:3000/')
@@ -53,11 +62,13 @@ setInterval(() => {
                     date: new Date(),
                     stars: stat.stars
                 });
+
+                localStoragePersister.set(data);
             });
             updateAxes();
             draw();
         });
-}, 3000);
+}, 1000);
 
 const svg = d3.select('#chart').append('svg')
     .attr('height', height)
@@ -78,8 +89,8 @@ const drawAxes = () => {
 }
 
 const line = d3.svg.line()
-    .x(d => x(d.date))
-    .y(d => y(d.stars));
+    .x(d => x(new Date(d.date)))
+    .y(d => y(+d.stars));
 
 const draw = () => {
     drawAxes();
